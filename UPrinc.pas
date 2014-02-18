@@ -1,0 +1,256 @@
+unit UPrinc;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.OleCtrls, SHDocVw,
+  Vcl.Imaging.pngimage, Vcl.ExtCtrls, inifiles, Vcl.Menus, System.Actions,
+  Vcl.ActnList;
+
+type
+  TForm1 = class(TForm)
+    WebBrowser1: TWebBrowser;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Edit4: TEdit;
+    Label4: TLabel;
+    Edit5: TEdit;
+    Label5: TLabel;
+    Label6: TLabel;
+    WebBrowser2: TWebBrowser;
+    WebBrowser3: TWebBrowser;
+    Image1: TImage;
+    Timer1: TTimer;
+    Edit6: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Button1: TButton;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Button2: TButton;
+    Button3: TButton;
+    TrayIcon1: TTrayIcon;
+    PopupMenu1: TPopupMenu;
+    Atualizar1: TMenuItem;
+    Mostrar1: TMenuItem;
+    Sair1: TMenuItem;
+    ActionList1: TActionList;
+    Atualizar: TAction;
+    Button4: TButton;
+    procedure Timer1Timer(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure Edit2Exit(Sender: TObject);
+    procedure Edit3Change(Sender: TObject);
+    procedure Edit4Change(Sender: TObject);
+    procedure Edit5Change(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure TrayIcon1DblClick(Sender: TObject);
+    procedure AtualizarExecute(Sender: TObject);
+    procedure Sair1Click(Sender: TObject);
+    procedure Mostrar1Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+function ValidaEmail(email:String):boolean;
+begin
+  Result := (Pos('@',email) >= 2) and (Pos('.',email) >= Pos('@',email)+2) and
+    (Pos('.',email) < Length(email));
+end;
+
+procedure TForm1.AtualizarExecute(Sender: TObject);
+begin
+if not (Edit1.Text = '') and
+ValidaEmail(Form1.Edit1.Text) and
+(Length(Edit2.Text)=37) and
+not (Edit2.Text = '') then
+  begin
+
+    begin
+      if not (Edit3.Text = '') then
+      begin
+      Form1.WebBrowser1.Navigate('https://cloudflare-updater.appspot.com/update/'+Form1.Edit1.Text+'/'+Form1.Edit2.Text+'/'+Form1.Edit3.Text);
+      Form1.Label13.Visible := true;
+      end;
+    end;
+    begin
+      if not (Edit4.Text = '') then
+      begin
+      Form1.WebBrowser2.Navigate('https://cloudflare-updater.appspot.com/update/'+Form1.Edit1.Text+'/'+Form1.Edit2.Text+'/'+Form1.Edit4.Text);
+      Form1.Label14.Visible := true;
+      end;
+    end;
+    begin
+      if not (Edit5.Text = '') then
+      begin
+      Form1.WebBrowser3.Navigate('https://cloudflare-updater.appspot.com/update/'+Form1.Edit1.Text+'/'+Form1.Edit2.Text+'/'+Form1.Edit5.Text);
+      Form1.Label15.Visible := true;
+      end;
+    end;
+
+  Form1.Label12.Font.Color := clGreen;
+  Form1.Label12.Caption := 'Tudo certo! DNS(s) Atualizado(s)';
+  end else
+
+    begin
+    Form1.Label12.Font.Color := clRed;
+    Form1.Label12.Caption := 'O e-mail ou API key estão incorretos';
+    end;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+if Form1.Timer1.Enabled = true then
+begin
+   Form1.Timer1.Enabled := False;
+   Form1.Button2.Caption := 'Ligar Automático';
+end else
+begin
+   Form1.Timer1.Enabled := true;
+   Form1.Button2.Caption := 'Desligar Automático';
+end;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+var
+   IniFile : TIniFile;
+begin
+   IniFile := TIniFile.Create(ChangeFileExt(Application.ExeName,'.z'));
+   IniFile.WriteString('config','email', Form1.edit1.Text);
+   IniFile.WriteString('config','api', Form1.edit2.Text);
+   IniFile.WriteString('config','dom1', Form1.edit3.Text);
+   IniFile.WriteString('config','dom2', Form1.edit4.Text);
+   IniFile.WriteString('config','dom3', Form1.edit5.Text);
+   IniFile.WriteString('config','timer', Form1.edit6.Text);
+   IniFile.Free;
+
+Form1.Timer1.Interval := StrToInt(Form1.Edit6.Text)*60000;
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+begin
+Form1.Hide;
+end;
+
+procedure TForm1.Edit1Exit(Sender: TObject);
+begin
+if not (Edit1.Text = '') and
+not ValidaEmail(Form1.Edit1.Text) then
+ShowMessage('E-mail Inválido');
+end;
+
+procedure TForm1.Edit2Exit(Sender: TObject);
+begin
+if not (Edit2.Text = '') and
+not (Length(Edit2.Text)=37) then
+ShowMessage('API Inválido');
+end;
+
+procedure TForm1.Edit3Change(Sender: TObject);
+begin
+Form1.Label13.Visible := False;
+end;
+
+procedure TForm1.Edit4Change(Sender: TObject);
+begin
+Form1.Label14.Visible := False;
+end;
+
+procedure TForm1.Edit5Change(Sender: TObject);
+begin
+Form1.Label15.Visible := False;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+var
+   IniFile : TIniFile;
+begin
+   IniFile := TIniFile.Create(ChangeFileExt(Application.ExeName,'.z'));
+   Form1.edit1.Text := IniFile.ReadString('config','email', '');
+   Form1.edit2.Text := IniFile.ReadString('config','api', '');
+   Form1.edit3.Text := IniFile.ReadString('config','dom1', '');
+   Form1.edit4.Text := IniFile.ReadString('config','dom2', '');
+   Form1.edit5.Text := IniFile.ReadString('config','dom3', '');
+   Form1.edit6.Text := IniFile.ReadString('config','timer', '2');
+   Form1.Timer1.Interval := IniFile.ReadInteger('config','timer', 2)*60000;
+   IniFile.Free;
+end;
+
+procedure TForm1.Mostrar1Click(Sender: TObject);
+begin
+Form1.Show;
+end;
+
+procedure TForm1.Sair1Click(Sender: TObject);
+begin
+Application.Terminate;
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+begin
+if not (Edit1.Text = '') and
+ValidaEmail(Form1.Edit1.Text) and
+(Length(Edit2.Text)=37) and
+not (Edit2.Text = '') then
+  begin
+
+    begin
+      if not (Edit3.Text = '') then
+      begin
+      Form1.WebBrowser1.Navigate('https://cloudflare-updater.appspot.com/update/'+Form1.Edit1.Text+'/'+Form1.Edit2.Text+'/'+Form1.Edit3.Text);
+      Form1.Label13.Visible := true;
+      end;
+    end;
+    begin
+      if not (Edit4.Text = '') then
+      begin
+      Form1.WebBrowser2.Navigate('https://cloudflare-updater.appspot.com/update/'+Form1.Edit1.Text+'/'+Form1.Edit2.Text+'/'+Form1.Edit4.Text);
+      Form1.Label14.Visible := true;
+      end;
+    end;
+    begin
+      if not (Edit5.Text = '') then
+      begin
+      Form1.WebBrowser3.Navigate('https://cloudflare-updater.appspot.com/update/'+Form1.Edit1.Text+'/'+Form1.Edit2.Text+'/'+Form1.Edit5.Text);
+      Form1.Label15.Visible := true;
+      end;
+    end;
+
+  Form1.Label12.Font.Color := clGreen;
+  Form1.Label12.Caption := 'Tudo certo! DNS(s) Atualizado(s)';
+  end else
+
+    begin
+    Form1.Label12.Font.Color := clRed;
+    Form1.Label12.Caption := 'O e-mail ou API key estão incorretos';
+    end;
+end;
+
+procedure TForm1.TrayIcon1DblClick(Sender: TObject);
+begin
+Form1.Show;
+end;
+
+end.
