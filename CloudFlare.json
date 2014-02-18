@@ -1,0 +1,6 @@
+{
+    "name":"CloudFlare DDNS",
+    "description": "Auto atualizador para IP dinamico",
+    "version": "1",
+    "category": "dns"
+}
