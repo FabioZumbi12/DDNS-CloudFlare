@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'CloudFlare DDNS Auto Updater'
-  ClientHeight = 334
+  ClientHeight = 340
   ClientWidth = 370
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -304,8 +304,8 @@ object Form1: TForm1
     ParentFont = False
   end
   object Label10: TLabel
-    Left = 67
-    Top = 304
+    Left = 68
+    Top = 312
     Width = 233
     Height = 11
     Caption = 'Este programa n'#227'o tem v'#237'nculo nenhum com CloudFlare'
@@ -318,7 +318,7 @@ object Form1: TForm1
   end
   object Label11: TLabel
     Left = 74
-    Top = 316
+    Top = 324
     Width = 216
     Height = 11
     Caption = 'O logo e logomarca pertencem '#225' '#169' CloudFlare, Inc.'
@@ -332,11 +332,12 @@ object Form1: TForm1
   object Label12: TLabel
     Left = 16
     Top = 274
-    Width = 335
+    Width = 288
     Height = 16
     Alignment = taCenter
+    Caption = '- Atualizando o(s) IP(s) AUTOMATICAMENTE!'
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clGreen
     Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
@@ -383,6 +384,19 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     Visible = False
+  end
+  object Label16: TLabel
+    Left = 76
+    Top = 301
+    Width = 213
+    Height = 11
+    Caption = 'Programa feito por: FabioZumbi12 - Area Z12 Brasil'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -9
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
   end
   object WebBrowser1: TWebBrowser
     Left = 413
@@ -493,41 +507,27 @@ object Form1: TForm1
       8000000000000000000000000000000000000000000000000000000000000000
       00000000000000000100000000000000000000000000000000000000}
   end
-  object Edit6: TEdit
-    Left = 122
-    Top = 198
-    Width = 31
-    Height = 24
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -13
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 8
-    Text = '2'
-  end
   object Button1: TButton
     Left = 254
     Top = 237
     Width = 100
     Height = 25
     Action = Atualizar
-    TabOrder = 9
+    TabOrder = 8
   end
   object Button2: TButton
     Left = 122
     Top = 237
     Width = 126
     Height = 25
-    Caption = 'Desligar Autom'#225'tico'
+    Caption = 'Autom'#225'tico: ON'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 10
+    TabOrder = 9
     OnClick = Button2Click
   end
   object Button3: TButton
@@ -536,7 +536,7 @@ object Form1: TForm1
     Width = 100
     Height = 25
     Caption = 'Salvar Config.'
-    TabOrder = 11
+    TabOrder = 10
     OnClick = Button3Click
   end
   object Button4: TButton
@@ -545,8 +545,27 @@ object Form1: TForm1
     Width = 100
     Height = 25
     Caption = 'Ocultar'
-    TabOrder = 12
+    TabOrder = 11
     OnClick = Button4Click
+  end
+  object ComboBox1: TComboBox
+    Left = 116
+    Top = 198
+    Width = 38
+    Height = 21
+    ItemIndex = 0
+    TabOrder = 12
+    Text = '15'
+    Items.Strings = (
+      '15'
+      '20'
+      '25'
+      '30'
+      '35'
+      '40'
+      '45'
+      '50'
+      '60')
   end
   object Timer1: TTimer
     Interval = 10000

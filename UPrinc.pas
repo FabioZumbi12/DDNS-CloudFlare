@@ -26,7 +26,6 @@ type
     WebBrowser3: TWebBrowser;
     Image1: TImage;
     Timer1: TTimer;
-    Edit6: TEdit;
     Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
@@ -47,6 +46,8 @@ type
     ActionList1: TActionList;
     Atualizar: TAction;
     Button4: TButton;
+    ComboBox1: TComboBox;
+    Label16: TLabel;
     procedure Timer1Timer(Sender: TObject);
     procedure Edit1Exit(Sender: TObject);
     procedure Edit2Exit(Sender: TObject);
@@ -61,6 +62,7 @@ type
     procedure Sair1Click(Sender: TObject);
     procedure Mostrar1Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+
   private
     { Private declarations }
   public
@@ -111,26 +113,30 @@ not (Edit2.Text = '') then
     end;
 
   Form1.Label12.Font.Color := clGreen;
-  Form1.Label12.Caption := 'Tudo certo! DNS(s) Atualizado(s)';
+  Form1.Label12.Caption := '- Tudo certo! DNS(s) Atualizado(s)';
   end else
 
     begin
     Form1.Label12.Font.Color := clRed;
-    Form1.Label12.Caption := 'O e-mail ou API key estão incorretos';
+    Form1.Label12.Caption := '- O e-mail ou API key estão incorretos';
     end;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
 if Form1.Timer1.Enabled = true then
-begin
+  begin
+   Form1.Label12.Font.Color := clRed;
+   Form1.Label12.Caption := '- Não iremos atualizar AUTOMATICAMENTE!';
    Form1.Timer1.Enabled := False;
-   Form1.Button2.Caption := 'Ligar Automático';
-end else
-begin
+   Form1.Button2.Caption := 'Automático: OFF';
+  end else
+  begin
+   Form1.Label12.Font.Color := clGreen;
+   Form1.Label12.Caption := '- OK! Vamos atualizar o(s) IP(s) a cada '+Form1.ComboBox1.Text+' Minutos';
    Form1.Timer1.Enabled := true;
-   Form1.Button2.Caption := 'Desligar Automático';
-end;
+   Form1.Button2.Caption := 'Automático: ON';
+  end;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
@@ -143,10 +149,10 @@ begin
    IniFile.WriteString('config','dom1', Form1.edit3.Text);
    IniFile.WriteString('config','dom2', Form1.edit4.Text);
    IniFile.WriteString('config','dom3', Form1.edit5.Text);
-   IniFile.WriteString('config','timer', Form1.edit6.Text);
+   IniFile.WriteString('config','timer', Form1.ComboBox1.Text);
    IniFile.Free;
 
-Form1.Timer1.Interval := StrToInt(Form1.Edit6.Text)*60000;
+Form1.Timer1.Interval := StrToInt(Form1.ComboBox1.Text)*60000;
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
@@ -193,8 +199,8 @@ begin
    Form1.edit3.Text := IniFile.ReadString('config','dom1', '');
    Form1.edit4.Text := IniFile.ReadString('config','dom2', '');
    Form1.edit5.Text := IniFile.ReadString('config','dom3', '');
-   Form1.edit6.Text := IniFile.ReadString('config','timer', '2');
-   Form1.Timer1.Interval := IniFile.ReadInteger('config','timer', 2)*60000;
+   Form1.ComboBox1.Text := IniFile.ReadString('config','timer', '15');
+   Form1.Timer1.Interval := IniFile.ReadInteger('config','timer', 15)*60000;
    IniFile.Free;
 end;
 
@@ -239,12 +245,12 @@ not (Edit2.Text = '') then
     end;
 
   Form1.Label12.Font.Color := clGreen;
-  Form1.Label12.Caption := 'Tudo certo! DNS(s) Atualizado(s)';
+  Form1.Label12.Caption := '- Tudo certo! DNS(s) Atualizado(s)';
   end else
 
     begin
     Form1.Label12.Font.Color := clRed;
-    Form1.Label12.Caption := 'O e-mail ou API key estão incorretos';
+    Form1.Label12.Caption := '- O e-mail ou API key estão incorretos';
     end;
 end;
 
